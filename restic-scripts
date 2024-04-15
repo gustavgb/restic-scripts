@@ -1,0 +1,36 @@
+#!/bin/bash
+
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+. $SCRIPT_DIR/config
+
+case $1 in
+  backup)
+    restic backup --files-from=$HOME/.restic_includes --exclude-file=$HOME/.restic_excludes
+    restic forget --keep-within-daily 10d --prune --max-unused 500M
+    ;;
+  mount)
+    if [ -d ~/restic_mount ]; then
+      printf "~/restic_mount/ already exist\n"
+      exit
+    fi
+
+    mkdir ~/restic_mount
+    restic mount ~/restic_mount
+    rm -r ~/restic_mount
+  ;;
+  prune)
+    restic forget $1 --prune --max-unused 500M
+  ;;
+  restore)
+    restic restore latest --target /home/gustav/ResticRestore
+  ;;
+  snapshots)
+    restic snapshots
+  ;;
+  unlock)
+    restic unlock
+  ;;
+  *)
+    echo "Invalid command"
+  ;;
+esac

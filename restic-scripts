@@ -22,7 +22,7 @@ case $1 in
     restic forget $1 --prune --max-unused 500M
   ;;
   restore)
-    restic restore latest --target /home/gustav/ResticRestore
+    restic restore latest --target ./ResticRestore
   ;;
   snapshots)
     restic snapshots

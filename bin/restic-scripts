@@ -19,7 +19,7 @@ case $1 in
     rm -r ~/restic_mount
   ;;
   prune)
-    restic forget $1 --prune --max-unused 500M
+    restic forget $2 --prune --max-unused 500M
   ;;
   restore)
     restic restore latest --target /home/gustav/ResticRestore

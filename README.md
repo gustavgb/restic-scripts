@@ -4,7 +4,7 @@ Command line utility to manage restic repository, while not exposing secrets to 
 
 ## Prerequisites
 
-Install restic, clone this repo and add it to your PATH.
+Install [restic (>=1.6)](https://restic.readthedocs.io/en/stable/020_installation.html), clone this repo and add it to your PATH.
 
 ## Setup
 

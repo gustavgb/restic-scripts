@@ -1,12 +1,16 @@
 #!/bin/bash
 
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
-. $SCRIPT_DIR/../config
+. ./.restic-config
 
 case $1 in
   backup)
-    restic backup --files-from=$HOME/.restic_includes --exclude-file=$HOME/.restic_excludes
-    restic forget --keep-within-daily 10d --prune --max-unused 500M
+    if test -f "./.restic-excludes"; then
+      restic backup --exclude-file=./.restic-excludes . --skip-if-unchanged
+      restic forget --keep-within-daily 10d --prune --max-unused 500M
+    else
+      restic backup . --skip-if-unchanged
+      restic forget --keep-within-daily 10d --prune --max-unused 500M
+    fi
     ;;
   mount)
     if [ -d ~/restic_mount ]; then
@@ -22,7 +26,7 @@ case $1 in
     restic forget $2 --prune --max-unused 500M
   ;;
   restore)
-    restic restore latest --target ./ResticRestore
+    restic restore latest --target ./restic-restore
   ;;
   snapshots)
     restic snapshots
